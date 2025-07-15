@@ -13,8 +13,10 @@
             >X</b-btn>
             {{processDetail.id}}
             <router-link
+              v-if="definitionDetail && definitionDetail.id"
               :to="{name:'definition', params:{ definitionId: definitionDetail.id}, query: {baseurl}}"
             >{{ definitionDetail.key }}({{definitionDetail.version}})</router-link>
+            <span v-else>{{ definitionDetail ? (definitionDetail.key || 'Loading...') : 'Loading...' }}</span>
           </h3>
         </b-col>
         <b-col v-if="processInstanceRuntimeData" col lg="2" class="text-right">

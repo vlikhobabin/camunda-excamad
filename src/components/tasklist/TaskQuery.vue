@@ -359,12 +359,23 @@ export default {
 
     },
     loadFiltersLocalStorage() {
-      var array = JSON.parse(localStorage.taskFilters);
-      array.forEach(element => {
-        this.filters.push(element);
-      });
-
-
+      if (localStorage.taskFilters && localStorage.taskFilters !== 'undefined') {
+        try {
+          var array = JSON.parse(localStorage.taskFilters);
+          if (Array.isArray(array)) {
+            array.forEach(element => {
+              this.filters.push(element);
+            });
+          }
+        } catch (e) {
+          console.warn('Failed to parse taskFilters from localStorage:', e);
+          // Initialize with empty array if parsing fails
+          localStorage.taskFilters = JSON.stringify([]);
+        }
+      } else {
+        // Initialize with empty array if not exists
+        localStorage.taskFilters = JSON.stringify([]);
+      }
     }
   }
 

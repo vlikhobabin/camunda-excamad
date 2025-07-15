@@ -6,6 +6,7 @@ import user from './modules/user';
 import auth from './modules/auth';
 import * as access from './modules/accessSetings';
 import { BPMAASURL } from '@/config/settings';
+import { generatePossibleUrl } from '@/config/camundasUrl';
 Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== 'production';
@@ -17,7 +18,7 @@ export default new Vuex.Store({
   },
   strict: debug,
   state: {
-    baseurl: '',
+    baseurl: generatePossibleUrl()[0] || '',
     role: '',
     bpmasserviceUrl: BPMAASURL,
     serverStatus: true,

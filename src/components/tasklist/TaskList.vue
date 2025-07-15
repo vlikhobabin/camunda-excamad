@@ -134,32 +134,36 @@ export default {
   },
   methods: {
     getCandidateGroupTasks() {
+      // Clear existing tasks to prevent duplicates
+      this.tasks = [];
+      
       var firstRequestCount = 0;
       var searchObjByCandidate = {
         active: true,
         candidateUser: this.camundaProfile.authenticatedUser
       }
+      
       this.$api().post("/task", searchObjByCandidate).then(response => {
         response.data.forEach(task => {
           this.tasks.push(task);
         });
         firstRequestCount = response.data.length;
 
-      })
-      var searchObjByUnassigne = {
-        active: true,
-        unassigned: true
-      }
-      this.$api().post("/task", searchObjByUnassigne).then(response => {
-        response.data.forEach(task => {
-
-          if (firstRequestCount == 0 || this.tasks.filter(e => e.id === task.id).length < 0) {
-            this.tasks.push(task);
-          }
+        // Only after first request completes, make the second request
+        var searchObjByUnassigne = {
+          active: true,
+          unassigned: true
+        }
+        
+        this.$api().post("/task", searchObjByUnassigne).then(response => {
+          response.data.forEach(task => {
+            // Fix: change < 0 to === 0 (length can never be < 0)
+            if (firstRequestCount == 0 || this.tasks.filter(e => e.id === task.id).length === 0) {
+              this.tasks.push(task);
+            }
+          });
         });
-      })
-
-
+      });
     },
 
     getUnfinishedTasksByQuery() {

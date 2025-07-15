@@ -49,24 +49,55 @@ export default {
       return this.$store.state.taskId;
     }
   },
+  watch: {
+    taskId(newTaskId, oldTaskId) {
+      if (newTaskId && newTaskId !== oldTaskId) {
+        // Validate taskId format before proceeding
+        const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidPattern.test(newTaskId)) {
+          console.warn('TaskDetails: Invalid taskId format:', newTaskId);
+          this.$store.commit("changeTaskId", null);
+          return;
+        }
+        
+        this.fieldsOk = false;
+        this.ready = false;
+        this.fields = [];
+        this.model = {};
+        this.formVariables = "";
+        this.formProps = [];
+        
+        this.getTaskProps().then(() => {
+          this.getFormVariables().then(() => {
+            this.addPropsToSchema()
+          });
+        }).catch(() => {
+          this.getFormVariables().then(() => {
+            this.generateDefaultForm();
+          });
+        });
+      }
+    }
+  },
   mounted() {
     this.fieldsOk = false;
     this.ready = false;
 
-
-    this.getTaskProps().then(() => {
-      this.getFormVariables().then(() => {
-        this.addPropsToSchema()
+    // Check if taskId is available before making API calls
+    if (this.taskId && this.taskId !== null && this.taskId !== undefined) {
+      this.getTaskProps().then(() => {
+        this.getFormVariables().then(() => {
+          this.addPropsToSchema()
+        });
+      }).catch(() => {
+        this.getFormVariables().then(() => {
+          this.generateDefaultForm();
+        });
       });
-    }).catch(() => {
-
-      this.getFormVariables().then(() => {
-        this.generateDefaultForm();
-      });
-
-    });
-
-
+    } else {
+      // No taskId available - this is normal when no task is selected
+      this.ready = true; // Set ready to true to show empty state
+    }
   },
   methods: {
     isJson(str) {
@@ -80,6 +111,18 @@ export default {
     getTaskProps() {
       var vm = this;
       return new Promise(function (resolve, reject) {
+        if (!vm.taskId || vm.taskId === null || vm.taskId === undefined) {
+          reject('No taskId available');
+          return;
+        }
+        
+        // Validate taskId format (basic UUID pattern check)
+        const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidPattern.test(vm.taskId)) {
+          reject('Invalid taskId format');
+          return;
+        }
+        
         api
           .getEntity("taskfields/" + vm.taskId, null, null)
           .then(value => {
@@ -105,6 +148,18 @@ export default {
 
       var vm = this;
       return new Promise(function (resolve, reject) {
+        if (!vm.taskId || vm.taskId === null || vm.taskId === undefined) {
+          reject('No taskId available');
+          return;
+        }
+        
+        // Validate taskId format (basic UUID pattern check)
+        const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidPattern.test(vm.taskId)) {
+          reject('Invalid taskId format');
+          return;
+        }
+        
         api
           .getEntity("task/" + vm.taskId, "form-variables", null)
           .then(value => {

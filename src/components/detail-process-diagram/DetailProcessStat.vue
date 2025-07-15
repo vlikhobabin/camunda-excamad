@@ -6,8 +6,10 @@
           <h3>
             {{processHistoryDetail.id}}
             <router-link
+              v-if="processHistoryDetail && processHistoryDetail.processDefinitionId"
               :to="{name:'definition', params:{ definitionId: processHistoryDetail.processDefinitionId}}"
             >{{ processHistoryDetail.processDefinitionId }}</router-link>
+            <span v-else>{{ processHistoryDetail ? processHistoryDetail.processDefinitionId || 'Loading...' : 'Loading...' }}</span>
           </h3>
         </b-col>
         <b-col v-if="processInstanceRuntimeData" col lg="2" class="text-right">

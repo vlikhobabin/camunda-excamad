@@ -159,7 +159,7 @@ export default {
         // access active viewer components
         var activeViewer = dmnViewer.getActiveViewer();
         // access active editor components
-        var canvas = activeViewer.get("canvasDes");
+        var canvas = activeViewer.get("canvas");
         // zoom to fit full viewport
         canvas.zoom("fit-viewport");
       });

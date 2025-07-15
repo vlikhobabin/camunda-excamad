@@ -16,7 +16,7 @@ import {
   USER_CAMUNDA_SUCCESS
 } from '../actions/user';
 import axios from 'axios';
-import * as api from '@/api/api';
+import createApiInstance from '@/api/api';
 import { URLFORAUTH } from '@/config/settings';
 
 const state = {
@@ -82,15 +82,13 @@ const actions = {
         password: user.password
       };
 
-      api
-        .createApi()
+      createApiInstance()
         .post('/identity/verify', identityObj)
         .then(response => {
           if (response.data.authenticated) {
             commit(AUTH_CAMUNDA_SUCCESS, camundatoken);
             commit(USER_CAMUNDA_SUCCESS, response.data);
-            api
-              .createApi()
+            createApiInstance()
               .get('/identity/groups?userId=' + response.data.authenticatedUser)
               .then(responseGroups => {
                 response.data['groups'] = responseGroups.data.groups;

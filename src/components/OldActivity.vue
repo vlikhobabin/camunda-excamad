@@ -32,7 +32,7 @@
               </p>
             </router-link>
           </td>
-          <td style="word-break:break-all;">{{item.processInstance.businessKey}}</td>
+          <td style="word-break:break-all;">{{item.processInstance && item.processInstance.businessKey ? item.processInstance.businessKey : 'N/A'}}</td>
         </tr>
       </tbody>
     </table>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import * as api from "@/api/api";
+import { getEntity } from "@/api/api";
 
 export default {
   name: "OldActivity",
@@ -59,38 +59,101 @@ export default {
   },
   methods: {
     getOldActivites() {
-      api
-        .getEntity(
-          "history",
-          "activity-instance",
-          "unfinished=true&startedBefore=" +
-            this.momentdays +
-            "&sortBy=startTime&sortOrder=asc&maxResults=200"
-        )
-        .then(value => {
-          value.forEach(element => {
-            api
-              .getEntity(
-                "process-instance/" + element.processInstanceId,
-                "",
-                ""
-              )
-              .then(response => {
-                this.$set(element, "processInstance", response);
-              });
-          });
-
-          this.oldActivites = value;
+      // Сначала попробуем простой запрос без даты
+      getEntity("history", "activity-instance", "unfinished=true&maxResults=5")
+        .then(simpleResult => {
+          // Если простой запрос работает, тестируем альтернативные подходы
+          this.testAlternativeApproaches();
+        })
+        .catch(simpleError => {
+          console.error("Simple request fails:", simpleError);
+          console.error("Even basic API request failed. Check server connection.");
         });
     },
+
+    async testAlternativeApproaches() {
+      // Подход 1: Без фильтрации по дате - просто получить незавершенные активности
+      try {
+        const result1 = await getEntity("history", "activity-instance", "unfinished=true&sortBy=startTime&sortOrder=desc&maxResults=50");
+        
+        if (result1.length > 0) {
+          this.processActivitiesWithoutDate(result1);
+          return;
+        }
+      } catch (error) {
+        // Approach 1 failed, continue to next approach
+      }
+
+      // Подход 2: Попробовать finishedBefore вместо startedBefore  
+      const dateStr = this.$momenttrue(new Date()).subtract(1, "days").format("YYYY-MM-DDTHH:mm:ss");
+      try {
+        const result2 = await getEntity("history", "activity-instance", `finishedBefore=${dateStr}&maxResults=10`);
+        this.processActivitiesWithDate(result2);
+        return;
+      } catch (error) {
+        // Approach 2 failed, continue to next approach
+      }
+
+      // Подход 3: Получить все активности и фильтровать на клиенте
+      try {
+        const result3 = await getEntity("history", "activity-instance", "sortBy=startTime&sortOrder=desc&maxResults=100");
+        this.filterActivitiesOnClient(result3);
+        return;
+      } catch (error) {
+        // Approach 3 failed
+      }
+      
+      console.error("All approaches failed! No data could be loaded.");
+    },
+
+    processActivitiesWithoutDate(activities) {
+      this.processActivitiesCommon(activities);
+    },
+
+    processActivitiesWithDate(activities) {
+      this.processActivitiesCommon(activities);
+    },
+
+    filterActivitiesOnClient(activities) {
+      // Фильтруем активности старше 7 дней
+      const sevenDaysAgo = this.$momenttrue().subtract(7, "days");
+      const filteredActivities = activities.filter(activity => {
+        if (activity.startTime) {
+          const startTime = this.$momenttrue(activity.startTime);
+          return startTime.isBefore(sevenDaysAgo);
+        }
+        return false;
+      });
+      
+      this.processActivitiesCommon(filteredActivities);
+    },
+
+    processActivitiesCommon(activities) {
+      
+      // Получаем детали процессов для каждой активности
+      activities.forEach(element => {
+        getEntity(
+          "process-instance/" + element.processInstanceId,
+          "",
+          ""
+        )
+          .then(response => {
+            this.$set(element, "processInstance", response);
+          })
+          .catch(error => {
+            console.warn("Failed to get process instance for", element.processInstanceId, error);
+          });
+      });
+
+      this.oldActivites = activities;
+    },
     findSubtractDate: function() {
+      // Упрощенная функция - больше не нужна сложная генерация дат
+      // так как мы используем альтернативные подходы
       var date = new Date();
-
-      var momentdays = this.$momenttrue(date)
-        .subtract(7, "days")
-        .format("YYYY-MM-DDTHH:mm:ss.SSSZZ");
-
-      this.momentdays = momentdays;
+      
+      var moment7DaysAgo = this.$momenttrue(date).subtract(7, "days");
+      this.momentdays = moment7DaysAgo.format("YYYY-MM-DDTHH:mm:ss");
     },
 
     convertDateToHumanStyle: function(date) {

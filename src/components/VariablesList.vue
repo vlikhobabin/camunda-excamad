@@ -45,7 +45,8 @@ export default {
   data() {
     return {
       variables: [],
-      applicationId: ""
+      applicationId: "",
+      applicationIntegrationId: ""
     };
   },
 
@@ -71,19 +72,26 @@ export default {
           this.variables = response.data;
 
           try {
-            this.applicationId = response.data.filter(obj => {
-              
+            const appIdVar = response.data.filter(obj => {
               return obj.name === "applicationId";
-            })[0].value;
-          }  finally {}
+            });
+            if (appIdVar.length > 0) {
+              this.applicationId = appIdVar[0].value;
+            }
+          } catch (error) {
+            console.warn("Error getting applicationId:", error);
+          }
 
           try {
-            this.applicationId = response.data.filter(obj => {
-              
+            const appIntegrationIdVar = response.data.filter(obj => {
               return obj.name === "applicationIntegrationId";
-            })[0].value;
-          } 
-           finally {}
+            });
+            if (appIntegrationIdVar.length > 0) {
+              this.applicationIntegrationId = appIntegrationIdVar[0].value;
+            }
+          } catch (error) {
+            console.warn("Error getting applicationIntegrationId:", error);
+          }
         });
     }
   }

@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
 export default
 
@@ -17,7 +16,23 @@ export default
       return ({ "mdText": "" });
     },
     mounted() {
-      axios.get(this.src).then(response => { this.mdText = response.data })
+      // Load static files from public directory using native fetch API
+      const staticFileUrl = `/${this.src}`;
+      
+      fetch(staticFileUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          return response.text();
+        })
+        .then(data => { 
+          this.mdText = data;
+        })
+        .catch(error => {
+          console.warn('Failed to load help file:', staticFileUrl, error);
+          this.mdText = `# File not found\n\nThe help file **${this.src}** could not be loaded.\n\nPlease check if the file exists in the public/help/ directory.`;
+        });
     }
   }
 </script>

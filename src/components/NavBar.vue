@@ -274,7 +274,7 @@ export default {
 
         healthcheck() {
             this.$api()
-                .get('engine')
+                .get('/engine')
                 .then(response => {
                     if (response.status == 200) {
                         this.$store.commit('changeServerStatus', true)

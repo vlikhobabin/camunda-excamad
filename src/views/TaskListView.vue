@@ -56,6 +56,10 @@ export default {
       return this.$store.getters.getCamundaProfile;
     },
   },
+  created() {
+    // Clear taskId when entering TaskListView to prevent stale taskId from previous navigation
+    this.$store.commit("changeTaskId", null);
+  },
   watch: {
     BaseUrl: function () {
       this.$store.commit("changeTaskId", null);
