@@ -86,12 +86,9 @@ export default {
     findSubtractDate: function() {
       var date = new Date();
 
-      var tendaysago = this.$momenttrue(date)
+      var momentdays = this.$momenttrue(date)
         .subtract(7, "days")
-        .calendar();
-      var momentdays = this.$momenttrue(tendaysago).format(
-        "YYYY-MM-DD[T]H:mm:ss.sss[UTC]"
-      );
+        .format("YYYY-MM-DDTHH:mm:ss.SSSZZ");
 
       this.momentdays = momentdays;
     },

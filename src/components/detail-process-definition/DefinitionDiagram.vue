@@ -144,6 +144,9 @@ export default {
       } else return "Suspend";
     },
     getStatistics() {
+      if (!this.definitionId) {
+        return;
+      }
       this.$api()
         .get(
           "/process-definition/" +

@@ -47,6 +47,7 @@
       </tbody>
     </table>
     <b-pagination-nav
+      v-if="totalPage > 1"
       align="center"
       size="sm"
       base-url="#"

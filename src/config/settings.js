@@ -14,17 +14,17 @@ export const REVERSPROXYURL = "/camunda-excamad/proxy/"; // reverse proxy URLs f
 
 export const SERVERVIRTALPATHPROD = "/camunda-excamad/"; //default virtual path
 
-export const BITBUCKETURL = "https://stash.bpmn2.ru"; // BitBucket
+export const BITBUCKETURL = ""; // "https://stash.bpmn2.ru"; // BitBucket
 
-export const JIRAPATH = "https://jira.bpmn2.ru"; //Jira
+export const JIRAPATH = ""; // "https://jira.bpmn2.ru"; //Jira
 
-export const TESTSPLUNKURL = "http://splunk-test.bpmn2.ru"; // Splunk iframe generator
-export const PRODSPLUNKURL = "http://splunk.bpmn2.ru";
+export const TESTSPLUNKURL = ""; // "http://splunk-test.bpmn2.ru"; // Splunk iframe generator
+export const PRODSPLUNKURL = ""; // "http://splunk.bpmn2.ru";
 
-export const TESTAUDITURL = "http://cloud-test.bpmn2.ru"; //internal logs reader iframe generator
-export const PRODAUDITURL = "http://cloud.bpmn2.ru";
+export const TESTAUDITURL = ""; // "http://cloud-test.bpmn2.ru"; //internal logs reader iframe generator
+export const PRODAUDITURL = ""; // "http://cloud.bpmn2.ru";
 
-export const USERPHOTOLOADURL = "https://mr.bpmn2.ru/people/"; //internal photo manager for Jira avatars
+export const USERPHOTOLOADURL = ""; // "https://mr.bpmn2.ru/people/"; //internal photo manager for Jira avatars
 
 export const URLFORAUTH =
-  "http://cloud-test.bpmn2.ru/exstra/login"; //user for login
+  "https://camunda.eg-holding.ru/engine-rest/identity/verify"; //user for login

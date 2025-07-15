@@ -1,36 +1,18 @@
-const REST_ENDPOINT = 'rest';
-const ENVORTMENT_PREFIX = [
-  {
-    name: 'prod',
-    url: 'cloud.bpmn2.ru'
-  },
-  {
-    name: 'dev',
-    url: 'cloud-dev.bpmn2.ru'
-  },
-  {
-    name: 'test',
-    url: 'cloud-test.bpmn2.ru'
-  }
-];
-const CAMUNDA_PROJECT = [];
-
 export function generatePossibleUrl() {
-  var arrayOfPossibleUlr = [];
+  // Define the list of possible Camunda URLs.
+  // We start with your primary server.
+  const arrayOfPossibleUlr = ['https://camunda.eg-holding.ru/engine-rest/'];
 
-  CAMUNDA_PROJECT.forEach(project => {
-    ENVORTMENT_PREFIX.forEach(envorment => {
-      var url =
-        'http://' + envorment.url + '/' + project + '/' + REST_ENDPOINT + '/';
-      arrayOfPossibleUlr.push(url);
-    });
-  });
-
+  // This part of the code adds any extra URLs you might have saved in the browser's local storage.
   if (localStorage.listOfUrl) {
-    var list = JSON.parse(localStorage.listOfUrl);
+    const list = JSON.parse(localStorage.listOfUrl);
     list.forEach(item => {
-      arrayOfPossibleUlr.push(item);
+      // Add the item only if it's not already in our list to prevent duplicates.
+      if (arrayOfPossibleUlr.indexOf(item) === -1) {
+        arrayOfPossibleUlr.push(item);
+      }
     });
   }
+
   return arrayOfPossibleUlr;
 }

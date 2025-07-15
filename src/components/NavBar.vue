@@ -274,16 +274,20 @@ export default {
 
         healthcheck() {
             this.$api()
-                .get('/engine')
-                .then(() => {
-                    this.status = 'UP'
-                    this.statusDate = Date()
-                    this.$store.commit('changeServerStatus', true) //
+                .get('engine')
+                .then(response => {
+                    if (response.status == 200) {
+                        this.$store.commit('changeServerStatus', true)
+                        this.status = true
+                        this.statusDate = new Date()
+                    } else {
+                        this.$store.commit('changeServerStatus', false)
+                        this.status = false
+                    }
                 })
-                .catch(() => {
-                    this.status = 'DOWN'
-                    this.statusDate = Date()
-                    this.$store.commit('changeServerStatus', false) //
+                .catch(err => {
+                    this.$store.commit('changeServerStatus', false)
+                    this.status = false
                 })
         },
         checkEnvortment() {

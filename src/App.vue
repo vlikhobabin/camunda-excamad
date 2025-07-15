@@ -17,6 +17,7 @@ import {
     AUTH_REQUEST,
     AUTH_CAMUNDA_REQUEST
 } from "@/store/actions/auth";
+import { mapState } from "vuex";
 
 export default {
     name: "home",
@@ -31,19 +32,17 @@ export default {
         };
     },
     computed: {
-        baseurl() {
-            return this.$store.state.baseurl
-        },
+        ...mapState(["baseurl", "username", "password", "darktheme"]),
     },
-    watch: {
-        baseurl(newValue) {
-            this.$router.push({
-                query: {
-                    baseurl: newValue
-                }
-            })
-        }
-    },
+    // watch: {
+    //     baseurl(newValue) {
+    //         this.$router.push({
+    //             query: {
+    //                 baseurl: newValue
+    //             }
+    //         })
+    //     }
+    // },
 
     created() {
         if (this.$route.query.baseurl) {
@@ -51,6 +50,18 @@ export default {
         }
     },
     mounted() {
+        // // This is the core logic to fix the startup issue.
+        // // It checks if the 'baseurl' parameter is missing from the current URL.
+        // if (!this.$route.query.baseurl) {
+        //     // If it's missing, we define the default URL for your Camunda server.
+        //     const defaultUrl = 'https://camunda.eg-holding.ru/engine-rest/';
+            
+        //     // We then force the application to navigate to the same page ('/'),
+        //     // but this time we add the '?baseurl=' parameter with your server's address.
+        //     // The `catch` is there to prevent an error if we are already on the correct page.
+        //     this.$router.push({ path: '/', query: { baseurl: defaultUrl } }).catch(err => {});
+        // }
+
         if (this.$route.query.dashboard == "true") {
             this.dashboard = true;
             this.containerClass = "container width content";

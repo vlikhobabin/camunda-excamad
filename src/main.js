@@ -1,12 +1,12 @@
-import '@babel/polyfill';
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router/router';
-import store from './store/store';
-import api from '@/api/api';
-import history from '@/components/History.vue';
-import noConnect from '@/components/noConnect.vue';
-import BaseUrl from '@/components/BaseUrl.vue';
+import "@babel/polyfill";
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router/router";
+import store from "./store/store";
+import api from "@/api/api";
+import history from "@/components/History.vue";
+import noConnect from "@/components/noConnect.vue";
+import BaseUrl from "@/components/BaseUrl.vue";
 import Diagram from '@/components/Diagram.vue';
 import ActivityList from '@/components/ActivityList.vue';
 import Login from '@/components/Login.vue';
@@ -203,6 +203,11 @@ Vue.component('VueJsonPretty', VueJsonPretty);
 Vue.use(VueClipboard);
 Vue.prototype.$api = api;
 Vue.prototype.$momenttrue = moment;
+
+import axios from "axios";
+
+// Set the default base URL for all Axios requests
+axios.defaults.baseURL = 'https://camunda.eg-holding.ru/engine-rest/';
 
 var vm = new Vue({
   router,

@@ -1,63 +1,32 @@
 import axios from "axios";
-import store from "@/store/store";
+import store from "../store/store";
 
-export default () => {
-  return createApi();
+const createApiInstance = () => {
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  };
+
+  if (store.state.restToken) {
+    headers.Authorization = "Bearer " + store.state.restToken;
+  }
+
+  return axios.create({
+    baseURL: store.state.baseurl,
+    headers: headers
+  });
 };
 
-export function createApi() {
-  var api =  axios.create({
-    baseURL: store.state.workOnBpmasservice
-      ? store.state.bpmasserviceUrl
-      : store.state.baseurl,
-    withCredentials: false,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    }
-  });
- 
-  if (store.state.restPasswordEnabled == true && store.state.restAuthType == "Basic") {
+export default createApiInstance;
 
-    var hash = btoa(store.state.restUsername + ":" +store.state.restPassword)
-    api.defaults.headers.common['Authorization'] = "Basic " + hash;
+export function getEntity(path, entity, query) {
+  const axiosInstance = createApiInstance();
+  let finalPath = path;
+  if (entity) {
+    finalPath += "/" + entity;
   }
-  if (store.state.restPasswordEnabled == true && store.state.restAuthType == "Bearer") {
-    api.defaults.headers.common['Authorization'] = "Bearer " + store.state.restBearerToken;
+  if (query) {
+    finalPath += "?" + query;
   }
-  return api 
-}
-
-export async function getEntity(rootEntity, additionalRoute, query) {
-  return new Promise(function(resolve, reject) {
-    if (rootEntity == null) {
-      return "no rootEntity!";
-    }
-    if (rootEntity != null) {
-      rootEntity = "/" + rootEntity;
-    }
-
-    if (query != null) {
-      query = "?" + query;
-    }
-    if (query == null) {
-      query = "";
-    }
-    if (additionalRoute == null) {
-      additionalRoute = "";
-    }
-    if (additionalRoute != null) {
-      additionalRoute = "/" + additionalRoute;
-    }
-    createApi()
-      .get(rootEntity + additionalRoute + query)
-      .then(response => {
-        var enitity = "";
-        enitity = response.data;
-        resolve(enitity);
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
+  return axiosInstance.get(finalPath).then(response => response.data);
 }

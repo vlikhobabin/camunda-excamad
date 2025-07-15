@@ -140,7 +140,7 @@ const router = new Router({
     },
     {
       path: '/bpmasservice/deploy/',
-      name: 'newdiagram',
+      name: 'deploy',
       component: DeployView
     },
     {
@@ -149,11 +149,11 @@ const router = new Router({
       props: true,
       component: DeployHelpView
     },
-    {
-      path: '/bpmasservice/deploytable/',
-      name: 'deploytable',
-      component: DeployTableBPMaSView
-    },
+    // {
+    //   path: '/bpmasservice/deploytable/',
+    //   name: 'deploytable',
+    //   component: DeployTableBPMaSView
+    // },
     {
       path: '/history',
       name: 'history',
@@ -242,13 +242,13 @@ const router = new Router({
       props: true,
       component: SelectedTaskView
     },
+    // {
+    //   path: '/deploytable/',
+    //   name: 'deploytable',
+    //   component: DeployTableView
+    // },
     {
-      path: '/deploytable/',
-      name: 'deploytable',
-      component: DeployTableView
-    },
-    {
-      path: '/report/',
+      path: '/report',
       name: 'report',
       component: ReportView
     },
