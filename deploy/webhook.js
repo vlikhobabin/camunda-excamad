@@ -2,7 +2,7 @@ const http = require('http');
 const createHandler = require('github-webhook-handler');
 const { exec } = require('child_process');
 
-// Замените на ваш секретный ключ
+// Замените YOUR_WEBHOOK_SECRET на реальный секретный ключ при установке
 const handler = createHandler({ path: '/webhook', secret: 'YOUR_WEBHOOK_SECRET' });
 
 http.createServer((req, res) => {
@@ -13,18 +13,17 @@ http.createServer((req, res) => {
 }).listen(7777);
 
 handler.on('error', (err) => {
-  console.error('Error:', err.message);
+  console.error('❌ Error:', err.message);
 });
 
 handler.on('push', (event) => {
-  console.log('Received a push event for %s to %s',
+  console.log('📥 Received a push event for %s to %s',
     event.payload.repository.name,
     event.payload.ref);
     
-  // Автоматический деплой только для master ветки
   if (event.payload.ref === 'refs/heads/master') {
     console.log('🚀 Starting automatic deployment...');
-    exec('/home/excamad/excamad/scripts/deploy.sh', (error, stdout, stderr) => {
+    exec('/opt/scripts/deploy.sh', (error, stdout, stderr) => {
       if (error) {
         console.error(`❌ Deploy error: ${error}`);
         return;
@@ -35,14 +34,6 @@ handler.on('push', (event) => {
       }
     });
   }
-});
-
-handler.on('issues', (event) => {
-  console.log('Received an issues event for %s action=%s: #%d %s',
-    event.payload.repository.name,
-    event.payload.action,
-    event.payload.issue.number,
-    event.payload.issue.title);
 });
 
 console.log('🎣 Webhook server listening on port 7777');
