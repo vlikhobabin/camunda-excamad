@@ -85,4 +85,41 @@
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 
+  <!-- CORS Filter для поддержки EXCAMAD приложения -->
+  <!-- Commenting out as CORS is now handled by Nginx
+  <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    <init-param>
+      <param-name>cors.allowed.origins</param-name>
+      <param-value>https://excamad.eg-holding.ru,http://localhost:8080,http://localhost:3000</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.methods</param-name>
+      <param-value>GET,POST,HEAD,OPTIONS,PUT,DELETE</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.headers</param-name>
+      <param-value>Content-Type,X-Requested-With,Accept,Authorization,Cache-Control,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.exposed.headers</param-name>
+      <param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.support.credentials</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.preflight.maxage</param-name>
+      <param-value>3600</param-value>
+    </init-param>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>CorsFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  -->
+
 </web-app>

@@ -14,19 +14,27 @@ server {
     location / {
         # Обработка pre-flight запросов OPTIONS
         if ($request_method = 'OPTIONS') {
-           add_header 'Access-Control-Allow-Origin' '*' always;
+           add_header 'Access-Control-Allow-Origin' $http_origin always;
            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With' always;
+           add_header 'Access-Control-Allow-Credentials' 'true' always;
            add_header 'Access-Control-Max-Age' 1728000;
            add_header 'Content-Type' 'text/plain charset=UTF-8';
            add_header 'Content-Length' 0;
            return 204;
         }
 
+        # Dynamic CORS for allowed origins
+        set $cors_origin "";
+        if ($http_origin ~* "^(https://excamad\.eg-holding\.ru|http://localhost:8080|http://localhost:3000)$") {
+            set $cors_origin $http_origin;
+        }
+
         # Добавляем CORS заголовки для всех остальных (не-OPTIONS) запросов
-        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Allow-Origin' $cors_origin always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
 
         # Проксируем запрос на Tomcat
         proxy_pass http://127.0.0.1:8080;

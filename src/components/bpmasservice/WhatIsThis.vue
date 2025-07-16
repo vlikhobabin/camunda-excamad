@@ -35,7 +35,7 @@
         <b-card
           overlay
           text-variant="white"
-          img-src="http://placekitten.com/g/1080/150"
+          img-src="/external-task-pattern.png"
           title="Persist payload"
         >
           <p

@@ -6,7 +6,7 @@
     <b-card
       v-if="baseurl"
       overlay
-      img-src="https://placekitten.com/1920/300"
+      img-src="/external-task-pattern.png"
       text-variant="white"
       title="No access ! Check:"
       border-variant="danger"

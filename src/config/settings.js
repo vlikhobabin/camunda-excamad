@@ -4,11 +4,11 @@ export const BPMAASURL =
 
 export const STATRTERPROCESSNAME = "StarterProcess"; //StarterProcess name for BPM-as-Service
 
-export const PRODSUBSTRING = "cloud"; // used for check env
+export const PRODSUBSTRING = "excamad.eg-holding.ru"; // updated for new domain
 export const TESTSUBSTRING = "test"; // used for check env
 
-export const PREFIXURLINPATHTOREMOVE = "http://cloud"; // used for clear settings
-export const POSTFIXURLINPATHTOREMOVE = "bpmn2.ru"; // used for clear settings
+export const PREFIXURLINPATHTOREMOVE = "https://excamad"; // updated for new domain
+export const POSTFIXURLINPATHTOREMOVE = "eg-holding.ru"; // updated for new domain
 
 export const REVERSPROXYURL = "/camunda-excamad/proxy/"; // reverse proxy URLs for Jira and Bitbucket integration
 

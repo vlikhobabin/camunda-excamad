@@ -7,7 +7,7 @@
     <b-card-group columns>
       <b-card
         title="Migration"
-        img-src="https://placekitten.com/700/400"
+        img-src="/bpmn2.gif"
         img-top
         style="max-width: 20rem;"
         class="mb-2"
@@ -19,7 +19,7 @@
       </b-card>
       <b-card
         title="Incidents"
-        img-src="http://placekitten.com/g/650/400"
+        img-src="/external-task-pattern.png"
         img-top
         style="max-width: 20rem;"
         class="mb-2"
@@ -31,7 +31,7 @@
       </b-card>
       <b-card
         title="Instance history and token management"
-        img-src="http://placekitten.com/g/700/350"
+        img-src="/adminka.png"
         img-top
         style="max-width: 20rem;"
         class="mb-2"
@@ -44,7 +44,7 @@
 
       <b-card
         title="Live"
-        img-src="http://placekitten.com/g/500/400"
+        img-src="/bpmn2.gif"
         img-top
         style="max-width: 20rem;"
         class="mb-2"
@@ -56,7 +56,7 @@
       </b-card>
       <b-card
         title="Old active processes"
-        img-src="http://placekitten.com/g/700/300"
+        img-src="/external-task-pattern.png"
         img-top
         style="max-width: 20rem;"
         class="mb-2"
@@ -68,7 +68,7 @@
       </b-card>
       <b-card
         title="Process definitions in BPMN"
-        img-src="http://placekitten.com/g/600/400"
+        img-src="/adminka.png"
         img-top
         style="max-width: 20rem;"
         class="mb-2"
