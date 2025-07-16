@@ -25,3 +25,6 @@ yarn-error.log*
 *.sw*
 
 # Special public ignores
+
+# User credentials
+src/config/users.yaml

@@ -42,19 +42,37 @@
 
                     <!-- Right aligned nav items -->
                     <b-navbar-nav class="ml-auto">
-                        <ul class="ulrouter" v-if="routes.length">
-                            <b-list-group>
-                                <b-list-group-item @click="route.handler" v-for="route in routes" :key="route.name + Math.random()" v-html="route.title"></b-list-group-item>
-                            </b-list-group>
-                        </ul>
-                        <search v-on:setUrlFromSearch="setUrlFromEmit"></search>
+                        <div class="d-flex align-items-center">
+                            <vue-simple-suggest
+                                v-model="query"
+                                :list="routes"
+                                :filter-by-query="true"
+                                :prevent-submit="true"
+                                :destyled="true"
+                                :styles="{ 'input-wrapper': 'input-wrapper' }"
+                                @select="setUrlFromEmit"
+                            >
+                                <input
+                                    class="routerinput"
+                                    placeholder="Search anything"
+                                    type="search"
+                                />
+                            </vue-simple-suggest>
+                        </div>
 
                         <b-nav-item to="/settings">Settings</b-nav-item>
+                        
                         <b-nav-item-dropdown text="Systems" right>
                             <b-dropdown-item to="/systems">More</b-dropdown-item>
-                            <b-dropdown-item-button @click="userSetBaserUrlFromBadge(item.name)" :key="item.name" v-for="item in list">
+                            <b-dropdown-item-button
+                                v-for="item in list"
+                                :key="item.name"
+                                @click="userSetBaserUrlFromBadge(item.name)"
+                            >
                                 <b v-if="item.name == baseurl">></b>
-                                <b-badge pill :variant="calculatePillColorForUrl(item.name)">{{calculateEnvormentForUrl(item.name)}}</b-badge>
+                                <b-badge pill :variant="calculatePillColorForUrl(item.name)">
+                                    {{calculateEnvormentForUrl(item.name)}}
+                                </b-badge>
                                 {{substringUrl(item.name)}}
                             </b-dropdown-item-button>
                             <b-dropdown-divider></b-dropdown-divider>
@@ -65,9 +83,10 @@
                         <b-nav-item v-b-tooltip.hover title="FAQ and manual" to="/help">
                             <font-awesome-icon icon="question-circle" />
                         </b-nav-item>
-                    </b-navbar-nav>
 
-                    <login></login>
+                        <!-- Компонент логина -->
+                        <login></login>
+                    </b-navbar-nav>
                 </b-collapse>
             </b-navbar>
         </div>

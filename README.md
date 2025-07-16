@@ -129,3 +129,26 @@ Excamad is serverless app - all api calls made from your browser. You need host 
     npm run serve  // start develop server
 
 You need write global variables in **settings.js** and **camundasUrl.js**.
+
+## User Configuration
+
+The application uses YAML configuration for user management. To set up users:
+
+1. Copy `src/config/users.example.yaml` to `src/config/users.yaml`
+2. Edit `users.yaml` with your actual user credentials
+3. Never commit `users.yaml` to version control - it's automatically ignored
+
+Example structure of `users.yaml`:
+```yaml
+system:
+  camunda:
+    username: "camunda_service_user"
+    password: "your_strong_password_here"
+    base64: "base64_encoded_credentials_here"
+
+users:
+  - username: "admin"
+    password: "admin_strong_password"
+```
+
+**Important:** Always use strong passwords in production!

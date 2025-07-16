@@ -276,6 +276,22 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = store.getters.isAuthenticated;
+
+  if (authRequired && !loggedIn) {
+    return next('/login');
+  }
+
+  if (loggedIn && to.path === '/login') {
+    return next('/');
+  }
+
+  next();
+});
+
+router.beforeEach((to, from, next) => {
   if (!hasQueryParams(to) && hasQueryParams(from)) {
     next({ name: to.name, query: from.query, params: to.params });
   } else {

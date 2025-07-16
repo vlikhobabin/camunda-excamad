@@ -1,0 +1,11 @@
+system:
+  camunda:
+    username: "camunda_service_user"
+    password: "your_strong_password_here"
+    base64: "base64_encoded_credentials_here"
+
+users:
+  - username: "admin"
+    password: "admin_strong_password"
+  - username: "user"
+    password: "user_strong_password" 

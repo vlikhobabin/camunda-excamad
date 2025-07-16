@@ -1,20 +1,17 @@
-import axios from "axios";
-import store from "../store/store";
+import axios from 'axios';
+import AuthService from '@/services/auth.service';
 
 const createApiInstance = () => {
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json"
-  };
-
-  if (store.state.restToken) {
-    headers.Authorization = "Bearer " + store.state.restToken;
-  }
-
-  return axios.create({
-    baseURL: store.state.baseurl,
-    headers: headers
+  const camundaAuth = AuthService.getCamundaAuth();
+  
+  const instance = axios.create({
+    headers: {
+      'Authorization': `Basic ${camundaAuth.base64}`,
+      'Content-Type': 'application/json'
+    }
   });
+
+  return instance;
 };
 
 export default createApiInstance;

@@ -10,7 +10,7 @@ server {
     listen 443 ssl http2;
     server_name excamad.eg-holding.ru;
 
-    # SSL сертификаты (нужно будет получить отдельные или wildcard)
+    # SSL сертификаты
     ssl_certificate /etc/letsencrypt/live/excamad.eg-holding.ru/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/excamad.eg-holding.ru/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
@@ -20,16 +20,26 @@ server {
     root /var/www/excamad/dist;
     index index.html;
 
-    # Настройки безопасности
+    # Усиленные настройки безопасности
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "no-referrer-when-downgrade" always;
-    add_header Content-Security-Policy "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'" always;
-
+    add_header Content-Security-Policy "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://camunda.eg-holding.ru; frame-ancestors 'none'" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    
+    # Защита от брутфорса (rate limiting)
+    limit_req_zone $binary_remote_addr zone=login:10m rate=1r/s;
+    
     # Основная локация для SPA
     location / {
         try_files $uri $uri/ /index.html;
+        
+        # Rate limiting для страницы логина
+        location = /login {
+            limit_req zone=login burst=5 nodelay;
+            try_files $uri $uri/ /index.html;
+        }
         
         # Настройки кеширования для статических файлов
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
@@ -38,7 +48,7 @@ server {
         }
     }
 
-    # Прокси для API запросов к Camunda (если нужно)
+    # Прокси для API запросов к Camunda
     location /camunda-api/ {
         proxy_pass https://camunda.eg-holding.ru/;
         proxy_set_header Host camunda.eg-holding.ru;
