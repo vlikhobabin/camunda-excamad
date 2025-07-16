@@ -42,6 +42,30 @@ mkdir -p /opt/camunda-excamad
 
 ### 3. Клонирование репозитория
 
+#### Вариант 1: Через HTTPS (быстрый способ)
+```bash
+cd /opt
+git clone https://github.com/vlikhobabin/camunda-excamad.git /opt/camunda-excamad
+cd /opt/camunda-excamad
+```
+При запросе введите ваш логин и пароль GitHub.
+
+#### Вариант 2: Через SSH (рекомендуется для постоянной работы)
+```bash
+# Генерируем SSH ключ
+ssh-keygen -t ed25519 -C "your_email@example.com"
+# Нажимаем Enter для всех вопросов
+
+# Показываем публичный ключ
+cat ~/.ssh/id_ed25519.pub
+```
+
+Затем:
+1. Копируем показанный ключ
+2. Заходим на GitHub → Settings → SSH and GPG keys → New SSH key
+3. Вставляем скопированный ключ
+
+После этого клонируем репозиторий:
 ```bash
 cd /opt
 git clone git@github.com:vlikhobabin/camunda-excamad.git /opt/camunda-excamad
